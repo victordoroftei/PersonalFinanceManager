@@ -1,12 +1,16 @@
 package com.personalfinancemanager.domain.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "receipts")
 public class ReceiptEntity {
 

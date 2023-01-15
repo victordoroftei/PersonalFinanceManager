@@ -1,11 +1,15 @@
 package com.personalfinancemanager.domain.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "users")
 public class UserEntity {
 

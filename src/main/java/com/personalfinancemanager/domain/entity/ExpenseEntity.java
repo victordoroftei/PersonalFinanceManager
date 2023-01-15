@@ -1,13 +1,17 @@
 package com.personalfinancemanager.domain.entity;
 
 import com.personalfinancemanager.domain.enums.ExpenseTypeEnum;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "expenses")
 public class ExpenseEntity {
 
