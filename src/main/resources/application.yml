@@ -8,6 +8,10 @@ spring:
   jpa:
     show-sql: true
 
+  jwt:
+    private.key: classpath:app.key
+    public.key: classpath:app.pub
+
   servlet:
     multipart:
       max-file-size: 50MB
