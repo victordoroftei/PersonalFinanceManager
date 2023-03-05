@@ -1,7 +1,9 @@
 package com.personalfinancemanager.domain.entity;
 
 import com.personalfinancemanager.domain.enums.ExpenseTypeEnum;
+import com.personalfinancemanager.util.DateUtil;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,5 +33,6 @@ public class ExpenseEntity {
     private ExpenseTypeEnum type;
 
     @Column(name = "inserted_date")
+    @DateTimeFormat(pattern = DateUtil.DATE_TIME_FORMAT)
     private LocalDateTime insertedDate;
 }

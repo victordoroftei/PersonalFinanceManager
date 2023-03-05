@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -13,9 +14,11 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class ReceiptScannedDto {
+public class ReceiptExtractedData {
 
-    private String items;
+    private List<String> itemNames;
+
+    private List<Double> itemPrices;
 
     private Double calculatedTotal;
 
@@ -24,8 +27,6 @@ public class ReceiptScannedDto {
     private String retailer;
 
     private String imagePath;
-
-    private String filePath;
 
     @JsonFormat(pattern = DateUtil.DATE_TIME_FORMAT)
     @DateTimeFormat(pattern = DateUtil.DATE_TIME_FORMAT)

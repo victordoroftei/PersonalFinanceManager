@@ -2,8 +2,9 @@ import json
 
 
 class Receipt:
-    def __init__(self, filePath, items, calculatedTotal, retailer):
+    def __init__(self, filePath, imagePath, items, calculatedTotal, retailer):
         self.__filePath = filePath
+        self.__imagePath = imagePath
         self.__items = items
         self.__calculatedTotal = calculatedTotal
         self.__detectedTotal = 0.0
@@ -52,5 +53,6 @@ class Receipt:
         dct["detectedTotal"] = self.__detectedTotal
         dct["retailer"] = self.__retailer
         dct["receiptDate"] = self.__receiptDate
+        dct["imagePath"] = self.__imagePath
 
         return json.dumps(dct)

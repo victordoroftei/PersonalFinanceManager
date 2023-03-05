@@ -25,6 +25,6 @@ public class ReceiptItemEntity {
     @Column(name = "item_name")
     private String itemName;
 
-    @Column(name = "price")
-    private Double price;
+    @Column(name = "itemPrice")
+    private Double itemPrice;
 }

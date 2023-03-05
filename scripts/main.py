@@ -64,7 +64,7 @@ if noArgs == 1:
     cv2.imwrite('opening.jpg', opening)
     cv2.imwrite('invert.jpg', invert)
 
-    postprocessor = Postprocessor(f"{fileName}-out.txt")
+    postprocessor = Postprocessor(f"{fileName}-out.txt", fileName)
     postprocessor.applyItemRegex()
     postprocessor.applyTotalRegex()
     postprocessor.applyDateAndTimeRegex()
@@ -108,7 +108,7 @@ else:
         outputFile.write(data)
         outputFile.close()
 
-        postprocessor = Postprocessor(f"{fileName}-out.txt")
+        postprocessor = Postprocessor(f"{fileName}-out.txt", fileName)
         postprocessor.applyItemRegex()
         postprocessor.applyTotalRegex()
         postprocessor.applyDateAndTimeRegex()

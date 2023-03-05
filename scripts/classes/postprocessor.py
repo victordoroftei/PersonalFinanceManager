@@ -5,8 +5,9 @@ from classes.receipt import Receipt
 
 
 class Postprocessor:
-    def __init__(self, filePath):
+    def __init__(self, filePath, imagePath):
         self.__filePath = filePath
+        self.__imagePath = imagePath
         self.__lines = []
         self.__receipt = None
 
@@ -65,7 +66,7 @@ class Postprocessor:
         # print(items)
         # print(f"Total: {total}")
 
-        self.__receipt = Receipt(self.__filePath, items, total, retailer)
+        self.__receipt = Receipt(self.__filePath, self.__imagePath, items, total, retailer)
 
     def applyTotalRegex(self):
         detectedTotalAttempt = 0.0

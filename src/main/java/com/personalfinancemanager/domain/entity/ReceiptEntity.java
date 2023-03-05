@@ -1,6 +1,8 @@
 package com.personalfinancemanager.domain.entity;
 
+import com.personalfinancemanager.util.DateUtil;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -32,12 +34,14 @@ public class ReceiptEntity {
     @Column(name = "retailer")
     private String retailer;
 
-    @Column(name = "file_path")
-    private String filePath;
+    @Column(name = "image_path")
+    private String imagePath;
 
     @Column(name = "receipt_date")
+    @DateTimeFormat(pattern = DateUtil.DATE_TIME_FORMAT)
     private LocalDateTime receiptDate;
 
     @Column(name = "inserted_date")
+    @DateTimeFormat(pattern = DateUtil.DATE_TIME_FORMAT)
     private LocalDateTime insertedDate;
 }

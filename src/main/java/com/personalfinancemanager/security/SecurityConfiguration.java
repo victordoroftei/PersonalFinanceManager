@@ -70,6 +70,8 @@ public class SecurityConfiguration {
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtDecoder(), userRepository))
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.GET, "/test/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/receipts/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling((exceptions) -> exceptions
