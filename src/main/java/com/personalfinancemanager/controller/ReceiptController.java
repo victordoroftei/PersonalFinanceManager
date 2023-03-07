@@ -1,6 +1,6 @@
 package com.personalfinancemanager.controller;
 
-import com.personalfinancemanager.domain.dto.ReceiptExtractedData;
+import com.personalfinancemanager.domain.dto.ReceiptModel;
 import com.personalfinancemanager.domain.entity.ReceiptEntity;
 import com.personalfinancemanager.security.JWTAuthorizationFilter;
 import com.personalfinancemanager.service.ReceiptService;
@@ -21,14 +21,20 @@ public class ReceiptController {
 
     @PostMapping("/upload")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ReceiptExtractedData upload(@RequestParam("file") MultipartFile file, @RequestHeader("Authorization") String token) {
+    public ReceiptModel upload(@RequestParam("file") MultipartFile file, @RequestHeader("Authorization") String token) {
         return receiptService.handleFile(file, JWTAuthorizationFilter.getUserIdFromJwt(token));
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void upload(@RequestBody ReceiptModel data, @RequestHeader("Authorization") String token) {
+        receiptService.addReceipt(data, JWTAuthorizationFilter.getUserIdFromJwt(token));
     }
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public ReceiptExtractedData getExtractedDataTest() {
-        return ReceiptExtractedData.builder()
+    public ReceiptModel getExtractedDataTest() {
+        return ReceiptModel.builder()
                 .calculatedTotal(55.16)
                 .detectedTotal(55.26)
                 .receiptDate(LocalDateTime.parse("2022-12-02T10:53:24"))

@@ -1,6 +1,6 @@
 package com.personalfinancemanager.util;
 
-import com.personalfinancemanager.domain.dto.ReceiptExtractedData;
+import com.personalfinancemanager.domain.dto.ReceiptModel;
 import com.personalfinancemanager.domain.dto.ReceiptScannedDto;
 import com.personalfinancemanager.domain.entity.ReceiptEntity;
 
@@ -16,13 +16,23 @@ public class ReceiptMapper {
                 .build();
     }
 
-    public static ReceiptExtractedData scannedDtoToExtractedData(ReceiptScannedDto dto) {
-        return ReceiptExtractedData.builder()
+    public static ReceiptModel scannedDtoToModel(ReceiptScannedDto dto) {
+        return ReceiptModel.builder()
                 .calculatedTotal(dto.getCalculatedTotal())
                 .detectedTotal(dto.getDetectedTotal())
                 .retailer(dto.getRetailer())
                 .imagePath(dto.getImagePath())
                 .receiptDate(dto.getReceiptDate())
+                .build();
+    }
+
+    public static ReceiptEntity modelToEntity(ReceiptModel model) {
+        return ReceiptEntity.builder()
+                .calculatedTotal(model.getCalculatedTotal())
+                .detectedTotal(model.getDetectedTotal())
+                .retailer(model.getRetailer())
+                .imagePath(model.getImagePath())
+                .receiptDate(model.getReceiptDate())
                 .build();
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class ReceiptExtractedData {
+public class ReceiptModel {
 
     private List<String> itemNames;
 

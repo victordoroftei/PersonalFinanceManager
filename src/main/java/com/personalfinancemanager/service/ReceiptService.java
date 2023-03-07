@@ -1,6 +1,6 @@
 package com.personalfinancemanager.service;
 
-import com.personalfinancemanager.domain.dto.ReceiptExtractedData;
+import com.personalfinancemanager.domain.dto.ReceiptModel;
 import com.personalfinancemanager.domain.dto.ReceiptScannedDto;
 import com.personalfinancemanager.domain.entity.ReceiptEntity;
 import com.personalfinancemanager.domain.entity.ReceiptItemEntity;
@@ -40,7 +40,21 @@ public class ReceiptService {
 
     private final UserRepository userRepository;
 
-    public ReceiptExtractedData handleFile(MultipartFile file, Integer userId) {
+    public void addReceipt(ReceiptModel data, Integer userId) {
+        Optional<UserEntity> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            ReceiptEntity receiptEntity = ReceiptMapper.modelToEntity(data);
+            receiptEntity.setUser(userOptional.get());
+            receiptEntity.setInsertedDate(LocalDateTime.now());
+
+            receiptRepository.save(receiptEntity);
+            saveReceiptItems(data, receiptEntity);
+        } else {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot find user when saving extracted receipt data!");
+        }
+    }
+
+    public ReceiptModel handleFile(MultipartFile file, Integer userId) {
         UUID imageUuid = UUID.randomUUID();
         String extension = FilenameUtils.getExtension(file.getOriginalFilename());
         String uploadedFilePath = String.format("%s\\uploads\\%s.%s", System.getProperty("user.dir"), imageUuid, extension);
@@ -61,24 +75,10 @@ public class ReceiptService {
             throw new FileProcessException("Uploaded image could not be processed!");
         }
 
-        Optional<UserEntity> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            ReceiptEntity receiptEntity = ReceiptMapper.scannedDtoToEntity(scanned);
-            receiptEntity.setUser(userOptional.get());
-            receiptEntity.setInsertedDate(LocalDateTime.now());
-
-            receiptRepository.save(receiptEntity);
-
-            ReceiptExtractedData extracted = processScanResult(scanned);
-            saveReceiptItems(extracted, receiptEntity);
-
-            return extracted;
-        } else {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot find user when saving extracted receipt data!");
-        }
+        return processScanResult(scanned);
     }
 
-    private void saveReceiptItems(ReceiptExtractedData extracted, ReceiptEntity entity) {
+    private void saveReceiptItems(ReceiptModel extracted, ReceiptEntity entity) {
         for (int i = 0; i < extracted.getItemNames().size(); i++) {
             ReceiptItemEntity itemEntity = ReceiptItemEntity.builder()
                     .receipt(entity)
@@ -90,8 +90,8 @@ public class ReceiptService {
         }
     }
 
-    private ReceiptExtractedData processScanResult(ReceiptScannedDto scanned) {
-        ReceiptExtractedData extracted = ReceiptMapper.scannedDtoToExtractedData(scanned);
+    private ReceiptModel processScanResult(ReceiptScannedDto scanned) {
+        ReceiptModel extracted = ReceiptMapper.scannedDtoToModel(scanned);
 
         String itemString = scanned.getItems();
         String[] itemStringSplitArr = itemString.split(";");
