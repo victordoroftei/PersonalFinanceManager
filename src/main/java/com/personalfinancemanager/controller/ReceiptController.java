@@ -27,7 +27,7 @@ public class ReceiptController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void upload(@RequestBody ReceiptModel data, @RequestHeader("Authorization") String token) {
+    public void addReceipt(@RequestBody ReceiptModel data, @RequestHeader("Authorization") String token) {
         receiptService.addReceipt(data, JWTAuthorizationFilter.getUserIdFromJwt(token));
     }
 

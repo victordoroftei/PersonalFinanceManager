@@ -47,6 +47,8 @@ public class ReceiptService {
             receiptEntity.setUser(userOptional.get());
             receiptEntity.setInsertedDate(LocalDateTime.now());
 
+            receiptEntity.setImagePath(getImagePathFromFullPath(receiptEntity.getImagePath()));
+
             receiptRepository.save(receiptEntity);
             saveReceiptItems(data, receiptEntity);
         } else {
@@ -146,5 +148,10 @@ public class ReceiptService {
 
     public ReceiptEntity getOne() {
         return receiptRepository.getOne();
+    }
+
+    private String getImagePathFromFullPath(String imagePath) {
+        String[] splitArr = imagePath.split("\\\\");
+        return splitArr[splitArr.length - 1];
     }
 }
