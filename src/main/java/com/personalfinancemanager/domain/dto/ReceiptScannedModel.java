@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class ReceiptScannedDto {
+public class ReceiptScannedModel {
 
     private String items;
 

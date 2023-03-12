@@ -6,7 +6,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.personalfinancemanager.domain.repository.UserRepository;
+import com.personalfinancemanager.repository.UserRepository;
 import com.personalfinancemanager.service.UserDetailsService;
 import com.personalfinancemanager.util.GeneralConfig;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +70,7 @@ public class SecurityConfiguration {
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtDecoder(), userRepository))
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/register").permitAll()
                 .antMatchers(HttpMethod.GET, "/test/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/receipts/**").hasRole("ADMIN")
                 .anyRequest().authenticated()

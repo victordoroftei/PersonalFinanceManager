@@ -1,18 +1,18 @@
 package com.personalfinancemanager.service;
 
 import com.personalfinancemanager.domain.dto.ReceiptModel;
-import com.personalfinancemanager.domain.dto.ReceiptScannedDto;
+import com.personalfinancemanager.domain.dto.ReceiptScannedModel;
 import com.personalfinancemanager.domain.entity.ReceiptEntity;
 import com.personalfinancemanager.domain.entity.ReceiptItemEntity;
 import com.personalfinancemanager.domain.entity.UserEntity;
-import com.personalfinancemanager.domain.repository.ReceiptItemRepository;
-import com.personalfinancemanager.domain.repository.ReceiptRepository;
-import com.personalfinancemanager.domain.repository.UserRepository;
+import com.personalfinancemanager.repository.ReceiptItemRepository;
+import com.personalfinancemanager.repository.ReceiptRepository;
 import com.personalfinancemanager.exception.FileProcessException;
 import com.personalfinancemanager.exception.FileSaveException;
 import com.personalfinancemanager.exception.ScriptException;
+import com.personalfinancemanager.repository.UserRepository;
 import com.personalfinancemanager.util.JsonUtil;
-import com.personalfinancemanager.util.ReceiptMapper;
+import com.personalfinancemanager.util.mapper.ReceiptMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
@@ -72,7 +72,7 @@ public class ReceiptService {
             throw new FileProcessException("Uploaded image could not be processed!");
         }
 
-        ReceiptScannedDto scanned = JsonUtil.jsonStringToReceiptEntity(response);
+        ReceiptScannedModel scanned = JsonUtil.jsonStringToReceiptEntity(response);
         if (scanned == null) {
             throw new FileProcessException("Uploaded image could not be processed!");
         }
@@ -92,8 +92,8 @@ public class ReceiptService {
         }
     }
 
-    private ReceiptModel processScanResult(ReceiptScannedDto scanned) {
-        ReceiptModel extracted = ReceiptMapper.scannedDtoToModel(scanned);
+    private ReceiptModel processScanResult(ReceiptScannedModel scanned) {
+        ReceiptModel extracted = ReceiptMapper.scannedModelToModel(scanned);
 
         String itemString = scanned.getItems();
         String[] itemStringSplitArr = itemString.split(";");

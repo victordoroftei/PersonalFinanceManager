@@ -1,7 +1,7 @@
 package com.personalfinancemanager.security;
 
 import com.personalfinancemanager.domain.entity.UserPrincipal;
-import com.personalfinancemanager.domain.repository.UserRepository;
+import com.personalfinancemanager.repository.UserRepository;
 import com.personalfinancemanager.util.JwtProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

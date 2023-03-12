@@ -1,6 +1,6 @@
 package com.personalfinancemanager.controller;
 
-import com.personalfinancemanager.domain.dto.ReceiptScannedDto;
+import com.personalfinancemanager.domain.dto.ReceiptScannedModel;
 import com.personalfinancemanager.service.TestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,8 +34,8 @@ public class TestController {
 
     @GetMapping("/test")
     @ResponseStatus(HttpStatus.OK)
-    public ReceiptScannedDto test() {
-        return ReceiptScannedDto.builder()
+    public ReceiptScannedModel test() {
+        return ReceiptScannedModel.builder()
                 .detectedTotal(50.50)
                 .build();
     }

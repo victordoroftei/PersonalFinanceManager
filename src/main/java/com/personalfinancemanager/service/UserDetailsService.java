@@ -2,7 +2,7 @@ package com.personalfinancemanager.service;
 
 import com.personalfinancemanager.domain.entity.UserEntity;
 import com.personalfinancemanager.domain.entity.UserPrincipal;
-import com.personalfinancemanager.domain.repository.UserRepository;
+import com.personalfinancemanager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,7 +25,7 @@ public class UserDetailsService implements org.springframework.security.core.use
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findUserEntityByEmail(email).orElse(null);
+        UserEntity user = userRepository.findUserEntityByEmailAddress(email).orElse(null);
 
         if(user == null) {
             throw new UsernameNotFoundException("Email not found!");

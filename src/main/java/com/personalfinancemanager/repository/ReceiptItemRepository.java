@@ -1,4 +1,4 @@
-package com.personalfinancemanager.domain.repository;
+package com.personalfinancemanager.repository;
 
 import com.personalfinancemanager.domain.entity.ReceiptItemEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
