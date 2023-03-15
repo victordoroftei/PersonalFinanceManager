@@ -5,10 +5,15 @@ import com.personalfinancemanager.domain.entity.ReceiptEntity;
 import com.personalfinancemanager.security.JWTAuthorizationFilter;
 import com.personalfinancemanager.service.ReceiptService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,6 +34,12 @@ public class ReceiptController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addReceipt(@RequestBody ReceiptModel data, @RequestHeader("Authorization") String token) {
         receiptService.addReceipt(data, JWTAuthorizationFilter.getUserIdFromJwt(token));
+    }
+
+    @GetMapping(value = "/image/{imagePath}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getImageWithMediaType(@PathVariable String imagePath) throws IOException {
+        FileInputStream in = new FileInputStream("E:\\__Teme\\_Licenta\\PersonalFinanceManager\\uploads\\" + imagePath);
+        return IOUtils.toByteArray(in);
     }
 
     @GetMapping("/all")

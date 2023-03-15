@@ -34,10 +34,10 @@ noArgs = len(sys.argv)
 if noArgs == 1:
     startTime = timer()
 
-    fileName = 'bon/IMG_0015.jpg'
+    fileName = 'bon/IMG_0017.jpg'
     img = cv2.imread(fileName)
 
-    img = cv2.resize(img, None, fx=0.6, fy=0.6, interpolation=cv2.INTER_AREA)
+    img = cv2.resize(img, None, fx=0.4, fy=0.4, interpolation=cv2.INTER_AREA)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     blur = cv2.GaussianBlur(gray, (3, 3), 0)
     thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
@@ -51,7 +51,7 @@ if noArgs == 1:
     # invert = 255 - opening
 
     # Perform text extraction
-    data = pytesseract.image_to_string(invert, lang='eng', config='--psm 6 -c tessedit_char_whitelist="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#/*%-.,abcdefghijklmnopqrstuvwxyz "')
+    data = pytesseract.image_to_string(invert, lang='eng+ron', config='--psm 6 -c tessedit_char_whitelist="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#/*%-.,abcdefghijklmnopqrstuvwxyz "')
     print(data)
 
     outputFile = open(f"{fileName}-out.txt", "w")
@@ -70,7 +70,7 @@ if noArgs == 1:
     postprocessor.applyDateAndTimeRegex()
     postprocessor.printJson()
 
-    d = image_to_data(invert, output_type=Output.DICT, lang="eng", config='--psm 6 -c tessedit_char_whitelist="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#/*%-.,abcdefghijklmnopqrstuvwxyz "')
+    d = image_to_data(invert, output_type=Output.DICT, lang="eng+ron", config='--psm 6 -c tessedit_char_whitelist="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#/*%-.,abcdefghijklmnopqrstuvwxyz "')
     for k in d.keys():
         print(k, ": ", d[k])
     n_boxes = len(d['level'])
@@ -93,7 +93,7 @@ else:
         fileName = sys.argv[2]
         img = cv2.imread(fileName)
 
-        img = cv2.resize(img, None, fx=0.6, fy=0.6, interpolation=cv2.INTER_AREA)
+        img = cv2.resize(img, None, fx=0.4, fy=0.4, interpolation=cv2.INTER_AREA)
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         blur = cv2.GaussianBlur(gray, (3, 3), 0)
         thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
@@ -101,7 +101,7 @@ else:
         opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=1)
         invert = 255 - thresh
 
-        data = pytesseract.image_to_string(invert, lang='eng',
+        data = pytesseract.image_to_string(invert, lang='eng+ron',
                                            config='--psm 6 -c tessedit_char_whitelist="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#/*%-.,abcdefghijklmnopqrstuvwxyz "')
 
         outputFile = open(f"{fileName}-out.txt", "w")
