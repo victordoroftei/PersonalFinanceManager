@@ -35,4 +35,14 @@ public class ReceiptMapper {
                 .receiptDate(model.getReceiptDate())
                 .build();
     }
+
+    public static ReceiptModel entityToModel(ReceiptEntity entity) {
+        return ReceiptModel.builder()
+                .calculatedTotal(entity.getCalculatedTotal())
+                .detectedTotal(entity.getDetectedTotal())
+                .retailer(entity.getRetailer())
+                .imagePath(entity.getImagePath())
+                .receiptDate(entity.getReceiptDate())
+                .build();
+    }
 }

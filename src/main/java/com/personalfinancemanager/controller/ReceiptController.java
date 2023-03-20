@@ -13,9 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,6 +34,18 @@ public class ReceiptController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addReceipt(@RequestBody ReceiptModel data, @RequestHeader("Authorization") String token) {
         receiptService.addReceipt(data, JWTAuthorizationFilter.getUserIdFromJwt(token));
+    }
+
+    @GetMapping("/date")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ReceiptModel> getReceiptsForMonthAndYear(@RequestParam Integer year, @RequestParam Integer month, @RequestHeader("Authorization") String token) {
+        return receiptService.getReceiptsForMonthAndYear(year, month, JWTAuthorizationFilter.getUserIdFromJwt(token));
+    }
+
+    @GetMapping("/years")
+    @ResponseStatus(HttpStatus.OK)
+    public Set<Integer> getPossibleReceiptYears(@RequestHeader("Authorization") String token) {
+        return receiptService.getPossibleReceiptYears(JWTAuthorizationFilter.getUserIdFromJwt(token));
     }
 
     @GetMapping(value = "/image/{imagePath}", produces = MediaType.IMAGE_JPEG_VALUE)

@@ -25,10 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +37,57 @@ public class ReceiptService {
     private final ReceiptItemRepository receiptItemRepository;
 
     private final UserRepository userRepository;
+
+    public List<ReceiptModel> getReceiptsForMonthAndYear(Integer year, Integer month, Integer userId) {
+        List<ReceiptEntity> entities = receiptRepository.findAllByUserId(userId);
+        for (ReceiptEntity entity : entities) {
+            System.out.println(entity.getReceiptDate().getYear());
+            System.out.println(entity.getReceiptDate().getMonthValue());
+        }
+        List<ReceiptEntity> filteredEntities = entities.stream()
+                .filter(x -> x.getReceiptDate().getYear() == year && x.getReceiptDate().getMonthValue() == month)
+                .collect(Collectors.toList());
+
+        List<ReceiptModel> models = new ArrayList<>();
+        for (ReceiptEntity entity : filteredEntities) {
+            models.add(getFullReceiptModelForReceiptId(entity.getId()));
+        }
+
+        return models;
+    }
+
+    public Set<Integer> getPossibleReceiptYears(Integer userId) {
+        List<ReceiptEntity> entities = receiptRepository.findAllByUserId(userId);
+        Set<Integer> possibleYears = new TreeSet<>();
+        entities.forEach(x -> {
+            possibleYears.add(x.getReceiptDate().getYear());
+        });
+
+        return possibleYears;
+    }
+
+    private ReceiptModel getFullReceiptModelForReceiptId(Integer receiptId) {
+        Optional<ReceiptEntity> receiptEntityOptional = receiptRepository.findById(receiptId);
+        if (receiptEntityOptional.isPresent()) {
+            ReceiptEntity receiptEntity = receiptEntityOptional.get();
+            ReceiptModel model = ReceiptMapper.entityToModel(receiptEntity);
+
+            List<ReceiptItemEntity> items = receiptItemRepository.findAllByReceiptId(receiptId);
+            List<Double> itemPrices = new ArrayList<>();
+            List<String> itemNames = new ArrayList<>();
+            for (ReceiptItemEntity item : items) {
+                itemPrices.add(item.getItemPrice());
+                itemNames.add(item.getItemName());
+            }
+
+            model.setItemNames(itemNames);
+            model.setItemPrices(itemPrices);
+
+            return model;
+        }
+
+        return null;
+    }
 
     public void addReceipt(ReceiptModel data, Integer userId) {
         Optional<UserEntity> userOptional = userRepository.findById(userId);
