@@ -40,10 +40,6 @@ public class ReceiptService {
 
     public List<ReceiptModel> getReceiptsForMonthAndYear(Integer year, Integer month, Integer userId) {
         List<ReceiptEntity> entities = receiptRepository.findAllByUserId(userId);
-        for (ReceiptEntity entity : entities) {
-            System.out.println(entity.getReceiptDate().getYear());
-            System.out.println(entity.getReceiptDate().getMonthValue());
-        }
         List<ReceiptEntity> filteredEntities = entities.stream()
                 .filter(x -> x.getReceiptDate().getYear() == year && x.getReceiptDate().getMonthValue() == month)
                 .collect(Collectors.toList());
@@ -89,17 +85,17 @@ public class ReceiptService {
         return null;
     }
 
-    public void addReceipt(ReceiptModel data, Integer userId) {
+    public void addReceipt(ReceiptModel model, Integer userId) {
         Optional<UserEntity> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
-            ReceiptEntity receiptEntity = ReceiptMapper.modelToEntity(data);
+            ReceiptEntity receiptEntity = ReceiptMapper.modelToEntity(model);
+
             receiptEntity.setUser(userOptional.get());
             receiptEntity.setInsertedDate(LocalDateTime.now());
-
             receiptEntity.setImagePath(getImagePathFromFullPath(receiptEntity.getImagePath()));
 
             receiptRepository.save(receiptEntity);
-            saveReceiptItems(data, receiptEntity);
+            saveReceiptItems(model, receiptEntity);
         } else {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot find user when saving extracted receipt data!");
         }

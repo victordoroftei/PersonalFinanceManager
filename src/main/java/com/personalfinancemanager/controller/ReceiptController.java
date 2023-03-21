@@ -32,8 +32,8 @@ public class ReceiptController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void addReceipt(@RequestBody ReceiptModel data, @RequestHeader("Authorization") String token) {
-        receiptService.addReceipt(data, JWTAuthorizationFilter.getUserIdFromJwt(token));
+    public void addReceipt(@RequestBody ReceiptModel model, @RequestHeader("Authorization") String token) {
+        receiptService.addReceipt(model, JWTAuthorizationFilter.getUserIdFromJwt(token));
     }
 
     @GetMapping("/date")
