@@ -40,8 +40,19 @@ public class ReceiptService {
 
     public List<ReceiptModel> getReceiptsForMonthAndYear(Integer year, Integer month, Integer userId) {
         List<ReceiptEntity> entities = receiptRepository.findAllByUserId(userId);
+
         List<ReceiptEntity> filteredEntities = entities.stream()
-                .filter(x -> x.getReceiptDate().getYear() == year && x.getReceiptDate().getMonthValue() == month)
+                .filter(x -> {
+                    if (year == -1) {
+                        return true;
+                    }
+
+                    if (month != 0) {
+                        return x.getReceiptDate().getYear() == year && x.getReceiptDate().getMonthValue() == month;
+                    }
+
+                    return x.getReceiptDate().getYear() == year;
+                })
                 .collect(Collectors.toList());
 
         List<ReceiptModel> models = new ArrayList<>();
@@ -55,9 +66,7 @@ public class ReceiptService {
     public Set<Integer> getPossibleReceiptYears(Integer userId) {
         List<ReceiptEntity> entities = receiptRepository.findAllByUserId(userId);
         Set<Integer> possibleYears = new TreeSet<>();
-        entities.forEach(x -> {
-            possibleYears.add(x.getReceiptDate().getYear());
-        });
+        entities.forEach(x -> possibleYears.add(x.getReceiptDate().getYear()));
 
         return possibleYears;
     }
