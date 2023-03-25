@@ -16,7 +16,7 @@ public class StatisticsController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public PercentageModel getStatistics(@RequestHeader("Authorization") String token) {
-        return statisticsService.getStatistics(JWTAuthorizationFilter.getUserIdFromJwt(token));
+    public PercentageModel getStatistics(@RequestParam Integer year, @RequestParam Integer month, @RequestHeader("Authorization") String token) {
+        return statisticsService.getStatistics(year, month, JWTAuthorizationFilter.getUserIdFromJwt(token));
     }
 }

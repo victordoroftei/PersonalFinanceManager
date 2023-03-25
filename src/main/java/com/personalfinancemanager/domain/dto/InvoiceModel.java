@@ -36,4 +36,10 @@ public class InvoiceModel {
     @JsonFormat(pattern = DateUtil.DATE_TIME_FORMAT)
     @DateTimeFormat(pattern = DateUtil.DATE_TIME_FORMAT)
     private LocalDateTime insertedDate;
+
+    @JsonFormat(pattern = DateUtil.DATE_TIME_FORMAT)
+    @DateTimeFormat(pattern = DateUtil.DATE_TIME_FORMAT)
+    private LocalDateTime paidDate;
+
+    private Boolean paid;
 }

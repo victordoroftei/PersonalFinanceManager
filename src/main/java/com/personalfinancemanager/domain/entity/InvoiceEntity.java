@@ -47,4 +47,11 @@ public class InvoiceEntity {
     @Column(name = "inserted_date")
     @DateTimeFormat(pattern = DateUtil.DATE_TIME_FORMAT)
     private LocalDateTime insertedDate;
+
+    @Column(name = "paid_date")
+    @DateTimeFormat(pattern = DateUtil.DATE_TIME_FORMAT)
+    private LocalDateTime paidDate;
+
+    @Column(name = "paid")
+    private Boolean paid;
 }
