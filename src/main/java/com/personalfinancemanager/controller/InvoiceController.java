@@ -1,4 +1,4 @@
-package com.personalfinancemanager.controller.advice;
+package com.personalfinancemanager.controller;
 
 import com.personalfinancemanager.domain.dto.InvoiceModel;
 import com.personalfinancemanager.security.JWTAuthorizationFilter;

@@ -1,6 +1,7 @@
 package com.personalfinancemanager.service;
 
 import com.personalfinancemanager.domain.dto.PercentageModel;
+import com.personalfinancemanager.domain.dto.YearlyStatisticsModel;
 import com.personalfinancemanager.domain.entity.ExpenseEntity;
 import com.personalfinancemanager.domain.entity.InvoiceEntity;
 import com.personalfinancemanager.domain.entity.ReceiptEntity;
@@ -10,7 +11,10 @@ import com.personalfinancemanager.repository.ReceiptRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -102,6 +106,51 @@ public class StatisticsService {
                 .build();
     }
 
+    public YearlyStatisticsModel getYearlyStatisticsByMonth(Integer year, Integer userId) {
+        List<ReceiptEntity> receiptEntities = receiptRepository.findAllByUserId(userId);
+        List<Double> receiptSums = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            int finalI = i;
+            double sum = receiptEntities.stream()
+                    .filter(x -> x.getReceiptDate().getYear() == year && x.getReceiptDate().getMonthValue() == finalI)
+                    .mapToDouble(ReceiptEntity::getCalculatedTotal)
+                    .sum();
+
+            receiptSums.add(sum);
+        }
+
+        List<InvoiceEntity> invoiceEntities = invoiceRepository.findAllByUserId(userId);
+        List<Double> invoiceSums = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            int finalI = i;
+            double sum = invoiceEntities.stream()
+                    .filter(x -> x.getPaid() && x.getPaidDate().getYear() == year && x.getPaidDate().getMonthValue() == finalI)
+                    .mapToDouble(InvoiceEntity::getAmount)
+                    .sum();
+
+            invoiceSums.add(sum);
+        }
+
+        List<ExpenseEntity> expenseEntities = expenseRepository.findAllByUserId(userId);
+        List<Double> expenseSums = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            int finalI = i;
+            double sum = expenseEntities.stream()
+                    .filter(x -> x.getInsertedDate().getYear() == year &&  x.getInsertedDate().getMonthValue() == finalI)
+                    .mapToDouble(ExpenseEntity::getPrice)
+                    .sum();
+
+            expenseSums.add(sum);
+        }
+
+        return YearlyStatisticsModel.builder()
+                .year(year)
+                .receipts(receiptSums)
+                .invoices(invoiceSums)
+                .expenses(expenseSums)
+                .build();
+    }
+
     private PercentageModel buildPercentageModel(Double receiptSum, Double invoiceSum, Double expenseSum) {
         Double totalSum = receiptSum + invoiceSum + expenseSum;
 
@@ -115,4 +164,5 @@ public class StatisticsService {
                 .receipts(receiptPercentage)
                 .build();
     }
+
 }
