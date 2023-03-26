@@ -74,4 +74,14 @@ public class ReceiptController {
         return receiptService.getOne();
     }
 
+    /*
+
+    @PostMapping("/sendEmail")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void sendEmail() {
+        emailService.sendEmailAsync();
+    }
+
+     */
+
 }
