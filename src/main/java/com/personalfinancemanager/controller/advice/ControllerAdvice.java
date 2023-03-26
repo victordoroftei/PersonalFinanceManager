@@ -19,7 +19,7 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({FileSaveException.class, ScriptException.class, FileProcessException.class})
-    public ResponseEntity<String> handleInternalServerErrors(FileSaveException ex) {
+    public ResponseEntity<String> handleInternalServerErrors(RuntimeException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
