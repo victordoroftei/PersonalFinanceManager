@@ -30,6 +30,10 @@ public class InvoiceService {
             invoiceEntity.setUser(userOptional.get());
             invoiceEntity.setInsertedDate(LocalDateTime.now());
 
+            if (invoiceEntity.getPaid().equals(false)) {
+                invoiceEntity.setPaidDate(null);
+            }
+
             invoiceRepository.save(invoiceEntity);
         } else {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Cannot find user when saving new invoice!");

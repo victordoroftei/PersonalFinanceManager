@@ -13,6 +13,8 @@ public class InvoiceMapper {
                 .invoiceDate(model.getInvoiceDate())
                 .dueDate(model.getDueDate())
                 .insertedDate(model.getInsertedDate())
+                .paidDate(model.getPaidDate())
+                .paid(model.getPaid())
                 .build();
     }
 
@@ -24,6 +26,8 @@ public class InvoiceMapper {
                 .invoiceDate(entity.getInvoiceDate())
                 .dueDate(entity.getDueDate())
                 .insertedDate(entity.getInsertedDate())
+                .paidDate(entity.getPaidDate())
+                .paid(entity.getPaid())
                 .build();
     }
 }
