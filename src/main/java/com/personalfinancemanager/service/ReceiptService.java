@@ -47,7 +47,7 @@ public class ReceiptService {
                         return true;
                     }
 
-                    if (month != 0) {
+                    if (month != 0 && month != -1) {
                         return x.getReceiptDate().getYear() == year && x.getReceiptDate().getMonthValue() == month;
                     }
 

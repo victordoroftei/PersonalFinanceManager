@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +57,39 @@ public class InvoiceService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no invoice with the provided ID!");
         }
 
+    }
+
+    public Set<Integer> getPossibleInvoiceYears(Integer userId) {
+        List<InvoiceEntity> entities = invoiceRepository.findAllByUserId(userId);
+        Set<Integer> possibleYears = new TreeSet<>();
+        entities.forEach(x -> possibleYears.add(x.getInvoiceDate().getYear()));
+
+        return possibleYears;
+    }
+
+    public List<InvoiceModel> getReceiptsForMonthAndYear(Integer year, Integer month, Integer userId) {
+        List<InvoiceEntity> entities = invoiceRepository.findAllByUserId(userId);
+
+
+        List<InvoiceEntity> filteredEntities = entities.stream()
+                .filter(x -> {
+                    if (year == -1) {
+                        return true;
+                    }
+
+                    if (month != 0 && month != -1) {
+                        return x.getInvoiceDate().getYear() == year && x.getInvoiceDate().getMonthValue() == month;
+                    }
+
+                    return x.getInvoiceDate().getYear() == year;
+                })
+                .collect(Collectors.toList());
+
+        List<InvoiceModel> models = new ArrayList<>();
+        for (InvoiceEntity entity : filteredEntities) {
+            models.add(InvoiceMapper.entityToModel(entity));
+        }
+
+        return models;
     }
 }
