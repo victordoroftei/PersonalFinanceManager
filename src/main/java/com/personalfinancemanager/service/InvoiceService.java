@@ -3,8 +3,10 @@ package com.personalfinancemanager.service;
 import com.personalfinancemanager.domain.dto.InvoiceModel;
 import com.personalfinancemanager.domain.entity.InvoiceEntity;
 import com.personalfinancemanager.domain.entity.UserEntity;
+import com.personalfinancemanager.repository.ExpenseRepository;
 import com.personalfinancemanager.repository.InvoiceRepository;
 import com.personalfinancemanager.repository.UserRepository;
+import com.personalfinancemanager.util.mapper.ExpenseMapper;
 import com.personalfinancemanager.util.mapper.InvoiceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,8 @@ public class InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
 
+    private final ExpenseRepository expenseRepository;
+
     private final UserRepository userRepository;
 
     public void addInvoice(InvoiceModel model, Integer userId) {
@@ -33,6 +37,8 @@ public class InvoiceService {
 
             if (invoiceEntity.getPaid().equals(false)) {
                 invoiceEntity.setPaidDate(null);
+            } else {
+                expenseRepository.save(ExpenseMapper.invoiceEntityToExpenseEntity(invoiceEntity));
             }
 
             invoiceRepository.save(invoiceEntity);
@@ -56,7 +62,6 @@ public class InvoiceService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no invoice with the provided ID!");
         }
-
     }
 
     public Set<Integer> getPossibleInvoiceYears(Integer userId) {
@@ -69,7 +74,6 @@ public class InvoiceService {
 
     public List<InvoiceModel> getReceiptsForMonthAndYear(Integer year, Integer month, Integer userId) {
         List<InvoiceEntity> entities = invoiceRepository.findAllByUserId(userId);
-
 
         List<InvoiceEntity> filteredEntities = entities.stream()
                 .filter(x -> {
@@ -91,5 +95,20 @@ public class InvoiceService {
         }
 
         return models;
+    }
+
+    public void payInvoice(Integer invoiceId) {
+        Optional<InvoiceEntity> invoiceEntityOptional = invoiceRepository.findById(invoiceId);
+
+        if (invoiceEntityOptional.isPresent()) {
+            InvoiceEntity entity = invoiceEntityOptional.get();
+
+            entity.setPaid(true);
+            entity.setPaidDate(LocalDateTime.now());
+
+            invoiceRepository.save(entity);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no invoice with the provided ID!");
+        }
     }
 }
