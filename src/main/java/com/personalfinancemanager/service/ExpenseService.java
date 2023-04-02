@@ -31,7 +31,10 @@ public class ExpenseService {
             ExpenseEntity expenseEntity = ExpenseMapper.modelToEntity(model);
 
             expenseEntity.setUser(userOptional.get());
-            expenseEntity.setInsertedDate(LocalDateTime.now());
+
+            if (expenseEntity.getExpenseDate() == null) {
+                expenseEntity.setExpenseDate(LocalDateTime.now());
+            }
 
             expenseRepository.save(expenseEntity);
         } else {
@@ -49,10 +52,10 @@ public class ExpenseService {
                     }
 
                     if (month != 0 && month != -1) {
-                        return x.getInsertedDate().getYear() == year && x.getInsertedDate().getMonthValue() == month;
+                        return x.getExpenseDate().getYear() == year && x.getExpenseDate().getMonthValue() == month;
                     }
 
-                    return x.getInsertedDate().getYear() == year;
+                    return x.getExpenseDate().getYear() == year;
                 })
                 .collect(Collectors.toList());
 

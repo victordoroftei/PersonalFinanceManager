@@ -113,6 +113,7 @@ public class InvoiceService {
             entity.setPaidDate(LocalDateTime.now());
 
             invoiceRepository.save(entity);
+            expenseRepository.save(ExpenseMapper.invoiceEntityToExpenseEntity(entity));
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no invoice with the provided ID!");
         }

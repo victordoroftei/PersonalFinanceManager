@@ -26,13 +26,16 @@ public class ExpenseEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "price")
     private Double price;
 
     @Column(name = "type")
     private ExpenseTypeEnum type;
 
-    @Column(name = "inserted_date")
+    @Column(name = "expense_date")
     @DateTimeFormat(pattern = DateUtil.DATE_TIME_FORMAT)
-    private LocalDateTime insertedDate;
+    private LocalDateTime expenseDate;
 }

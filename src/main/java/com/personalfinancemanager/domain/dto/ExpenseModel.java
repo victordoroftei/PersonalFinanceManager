@@ -16,11 +16,13 @@ import java.time.LocalDateTime;
 @ToString
 public class ExpenseModel {
 
+    private String description;
+
     private Double price;
 
     private ExpenseTypeEnum type;
 
     @JsonFormat(pattern = DateUtil.DATE_TIME_FORMAT)
     @DateTimeFormat(pattern = DateUtil.DATE_TIME_FORMAT)
-    private LocalDateTime insertedDate;
+    private LocalDateTime expenseDate;
 }

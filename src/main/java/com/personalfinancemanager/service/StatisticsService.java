@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -89,9 +87,9 @@ public class StatisticsService {
         List<ExpenseEntity> filteredExpenseEntityList = expenseEntityList.stream()
                 .filter(x -> {
                     if (finalMonth != 0) {
-                        return x.getInsertedDate().getYear() == year && x.getInsertedDate().getMonthValue() == finalMonth;
+                        return x.getExpenseDate().getYear() == year && x.getExpenseDate().getMonthValue() == finalMonth;
                     } else {
-                        return x.getInsertedDate().getYear() == year;
+                        return x.getExpenseDate().getYear() == year;
                     }
                 })
                 .collect(Collectors.toList());
@@ -136,7 +134,7 @@ public class StatisticsService {
         for (int i = 1; i <= 12; i++) {
             int finalI = i;
             double sum = expenseEntities.stream()
-                    .filter(x -> x.getInsertedDate().getYear() == year &&  x.getInsertedDate().getMonthValue() == finalI)
+                    .filter(x -> x.getExpenseDate().getYear() == year &&  x.getExpenseDate().getMonthValue() == finalI)
                     .mapToDouble(ExpenseEntity::getPrice)
                     .sum();
 
