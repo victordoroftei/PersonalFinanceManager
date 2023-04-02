@@ -30,6 +30,8 @@ public class InvoiceService {
 
     private final UserRepository userRepository;
 
+    private final NotificationHistoryService notificationHistoryService;
+
     public void addInvoice(InvoiceModel model, Integer userId) {
         Optional<UserEntity> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
@@ -136,8 +138,14 @@ public class InvoiceService {
     @Async
     @Scheduled(fixedRate = 86400000)    // 24 hour fixed rate
     public void sendDueInvoicesReminder() {
-        System.out.println("--------------------- DUE INVOINCES REMINDER ----------------------");
-        /// TODO: tabel cu zile si luni, sa nu trimitem de 2 ori in aceeasi zi SMS/email
+        System.out.println("--------------------- DUE INVOICES REMINDER ----------------------");
+        if (!notificationHistoryService.checkIfRecordAlreadyExists()) {
+            System.out.println("--------------------- SENDING DUE INVOICES REMINDER EMAILS ----------------------");
+            // ...
+            notificationHistoryService.addRecord();
+        } else {
+            System.out.println("--------------------- NOTIFICATION HISTORY RECORD ALREADY EXISTS ----------------------");
+        }
     }
 
     private Long calculateDayDifferenceBetweenDates(LocalDateTime dueDate, LocalDateTime currentDate) {
