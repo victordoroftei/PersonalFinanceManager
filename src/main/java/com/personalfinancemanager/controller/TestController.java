@@ -1,6 +1,6 @@
 package com.personalfinancemanager.controller;
 
-import com.personalfinancemanager.domain.dto.ReceiptScannedModel;
+import com.personalfinancemanager.domain.model.ReceiptScannedModel;
 import com.personalfinancemanager.service.TestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

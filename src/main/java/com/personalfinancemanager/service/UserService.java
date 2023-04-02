@@ -1,6 +1,6 @@
 package com.personalfinancemanager.service;
 
-import com.personalfinancemanager.domain.dto.UserModel;
+import com.personalfinancemanager.domain.model.UserModel;
 import com.personalfinancemanager.domain.entity.UserEntity;
 import com.personalfinancemanager.exception.ValidationException;
 import com.personalfinancemanager.repository.UserRepository;

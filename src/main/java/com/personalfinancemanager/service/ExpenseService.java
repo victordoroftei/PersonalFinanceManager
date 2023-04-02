@@ -1,6 +1,6 @@
 package com.personalfinancemanager.service;
 
-import com.personalfinancemanager.domain.dto.ExpenseModel;
+import com.personalfinancemanager.domain.model.ExpenseModel;
 import com.personalfinancemanager.domain.entity.ExpenseEntity;
 import com.personalfinancemanager.domain.entity.UserEntity;
 import com.personalfinancemanager.repository.ExpenseRepository;
@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,5 +63,13 @@ public class ExpenseService {
         }
 
         return models;
+    }
+
+    public Set<Integer> getPossibleYears(Integer userId) {
+        List<ExpenseEntity> entities = expenseRepository.findAllByUserId(userId);
+        Set<Integer> possibleYears = new TreeSet<>();
+        entities.forEach(x -> possibleYears.add(x.getExpenseDate().getYear()));
+
+        return possibleYears;
     }
 }

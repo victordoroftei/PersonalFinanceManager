@@ -1,4 +1,4 @@
-package com.personalfinancemanager.domain.dto;
+package com.personalfinancemanager.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

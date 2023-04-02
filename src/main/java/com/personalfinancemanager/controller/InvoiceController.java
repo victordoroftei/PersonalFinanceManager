@@ -1,6 +1,6 @@
 package com.personalfinancemanager.controller;
 
-import com.personalfinancemanager.domain.dto.InvoiceModel;
+import com.personalfinancemanager.domain.model.InvoiceModel;
 import com.personalfinancemanager.domain.entity.InvoiceEntity;
 import com.personalfinancemanager.security.JWTAuthorizationFilter;
 import com.personalfinancemanager.service.InvoiceService;

@@ -1,4 +1,4 @@
-package com.personalfinancemanager.domain.dto;
+package com.personalfinancemanager.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.personalfinancemanager.domain.enums.InvoiceTypeEnum;

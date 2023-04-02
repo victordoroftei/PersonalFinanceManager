@@ -1,6 +1,6 @@
 package com.personalfinancemanager.util.mapper;
 
-import com.personalfinancemanager.domain.dto.InvoiceModel;
+import com.personalfinancemanager.domain.model.InvoiceModel;
 import com.personalfinancemanager.domain.entity.InvoiceEntity;
 
 public class InvoiceMapper {

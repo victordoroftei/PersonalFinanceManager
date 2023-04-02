@@ -1,6 +1,6 @@
 package com.personalfinancemanager.controller;
 
-import com.personalfinancemanager.domain.dto.UserModel;
+import com.personalfinancemanager.domain.model.UserModel;
 import com.personalfinancemanager.security.JWTAuthorizationFilter;
 import com.personalfinancemanager.service.UserService;
 import lombok.RequiredArgsConstructor;

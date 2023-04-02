@@ -1,7 +1,7 @@
 package com.personalfinancemanager.util.mapper;
 
-import com.personalfinancemanager.domain.dto.ReceiptModel;
-import com.personalfinancemanager.domain.dto.ReceiptScannedModel;
+import com.personalfinancemanager.domain.model.ReceiptModel;
+import com.personalfinancemanager.domain.model.ReceiptScannedModel;
 import com.personalfinancemanager.domain.entity.ReceiptEntity;
 
 public class ReceiptMapper {

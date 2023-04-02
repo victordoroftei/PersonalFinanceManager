@@ -76,6 +76,7 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.POST, "/receipts/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/invoices/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/statistics/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/expenses/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling((exceptions) -> exceptions

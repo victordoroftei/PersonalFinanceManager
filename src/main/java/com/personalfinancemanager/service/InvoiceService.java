@@ -1,6 +1,6 @@
 package com.personalfinancemanager.service;
 
-import com.personalfinancemanager.domain.dto.InvoiceModel;
+import com.personalfinancemanager.domain.model.InvoiceModel;
 import com.personalfinancemanager.domain.entity.InvoiceEntity;
 import com.personalfinancemanager.domain.entity.UserEntity;
 import com.personalfinancemanager.repository.ExpenseRepository;

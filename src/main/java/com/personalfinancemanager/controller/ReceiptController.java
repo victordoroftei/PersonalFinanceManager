@@ -1,6 +1,6 @@
 package com.personalfinancemanager.controller;
 
-import com.personalfinancemanager.domain.dto.ReceiptModel;
+import com.personalfinancemanager.domain.model.ReceiptModel;
 import com.personalfinancemanager.domain.entity.ReceiptEntity;
 import com.personalfinancemanager.security.JWTAuthorizationFilter;
 import com.personalfinancemanager.service.ReceiptService;

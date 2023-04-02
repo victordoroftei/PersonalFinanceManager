@@ -1,7 +1,9 @@
 package com.personalfinancemanager.service;
 
-import com.personalfinancemanager.domain.dto.PercentageModel;
-import com.personalfinancemanager.domain.dto.YearlyStatisticsModel;
+import com.personalfinancemanager.domain.entity.ExpenseTypeSum;
+import com.personalfinancemanager.domain.model.ExpensesMonthlyStatisticsModel;
+import com.personalfinancemanager.domain.model.PercentageModel;
+import com.personalfinancemanager.domain.model.YearlyStatisticsModel;
 import com.personalfinancemanager.domain.entity.ExpenseEntity;
 import com.personalfinancemanager.domain.entity.InvoiceEntity;
 import com.personalfinancemanager.domain.entity.ReceiptEntity;
@@ -12,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -149,6 +153,67 @@ public class StatisticsService {
                 .build();
     }
 
+    public ExpensesMonthlyStatisticsModel getExpensesGroupedByType(Integer year, Integer month, Integer userId) {
+        List<ExpenseEntity> entities = expenseRepository.findAllByUserId(userId);
+        List<ExpenseEntity> filteredEntities = entities.stream()
+                .filter(x -> {
+                    if (month <= 0) {
+                        return x.getExpenseDate().getYear() == year;
+                    }
+
+                    return x.getExpenseDate().getYear() == year && x.getExpenseDate().getMonthValue() == month;
+                })
+                .collect(Collectors.toList());
+
+        List<String> possibleTypes = List.of("RECEIPT", "INVOICE", "RENT", "FUEL", "FOOD", "TRANSPORT", "EDUCATION", "CLOTHING", "OTHER");
+        Map<String, List<Double>> map = new HashMap<>();
+        if (month <= 0) {
+            for (String type : possibleTypes) {
+                List<Double> list = new ArrayList<>();
+                for (int i = 1; i <= 12; i++) {
+                    int finalI = i;
+                    double sum = filteredEntities.stream()
+                            .filter(x -> type.equals(x.getType().name()) && x.getExpenseDate().getMonthValue() == finalI)
+                            .mapToDouble(ExpenseEntity::getPrice)
+                            .sum();
+
+                    list.add(sum);
+                }
+                map.put(type, list);
+            }
+        } else {
+            for (String type : possibleTypes) {
+                List<Double> list = new ArrayList<>();
+                for (int i = 1; i <= 31; i++) {
+                    int finalI = i;
+                    double sum = filteredEntities.stream()
+                            .filter(x -> type.equals(x.getType().name()) && x.getExpenseDate().getDayOfMonth() == finalI)
+                            .mapToDouble(ExpenseEntity::getPrice)
+                            .sum();
+
+                    list.add(sum);
+                }
+                map.put(type, list);
+            }
+        }
+
+        ExpensesMonthlyStatisticsModel model = ExpensesMonthlyStatisticsModel.builder()
+                .year(year)
+                .month(month)
+                .receipt(map.get("RECEIPT"))
+                .invoice(map.get("INVOICE"))
+                .rent(map.get("RENT"))
+                .food(map.get("FOOD"))
+                .fuel(map.get("FUEL"))
+                .transport(map.get("TRANSPORT"))
+                .education(map.get("EDUCATION"))
+                .clothing(map.get("CLOTHING"))
+                .other(map.get("OTHER"))
+                .build();
+
+        return model;
+    }
+
     private PercentageModel buildPercentageModel(Double receiptSum, Double invoiceSum, Double expenseSum) {
         Double totalSum = receiptSum + invoiceSum + expenseSum;
 
@@ -162,5 +227,4 @@ public class StatisticsService {
                 .receipts(receiptPercentage)
                 .build();
     }
-
 }

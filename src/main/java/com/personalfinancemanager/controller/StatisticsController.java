@@ -1,7 +1,8 @@
 package com.personalfinancemanager.controller;
 
-import com.personalfinancemanager.domain.dto.PercentageModel;
-import com.personalfinancemanager.domain.dto.YearlyStatisticsModel;
+import com.personalfinancemanager.domain.model.ExpensesMonthlyStatisticsModel;
+import com.personalfinancemanager.domain.model.PercentageModel;
+import com.personalfinancemanager.domain.model.YearlyStatisticsModel;
 import com.personalfinancemanager.security.JWTAuthorizationFilter;
 import com.personalfinancemanager.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,11 @@ public class StatisticsController {
     @ResponseStatus(HttpStatus.OK)
     public YearlyStatisticsModel getYearlyStatisticsByMonth(@RequestParam Integer year, @RequestHeader("Authorization") String token) {
         return statisticsService.getYearlyStatisticsByMonth(year, JWTAuthorizationFilter.getUserIdFromJwt(token));
+    }
+
+    @GetMapping("/expenses")
+    @ResponseStatus(HttpStatus.OK)
+    public ExpensesMonthlyStatisticsModel getExpensesMonthly(@RequestParam Integer year, @RequestParam Integer month, @RequestHeader("Authorization") String token) {
+        return statisticsService.getExpensesGroupedByType(year, month, JWTAuthorizationFilter.getUserIdFromJwt(token));
     }
 }

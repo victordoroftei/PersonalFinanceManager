@@ -1,6 +1,6 @@
 package com.personalfinancemanager.security;
 
-import com.personalfinancemanager.domain.dto.LoginRequest;
+import com.personalfinancemanager.domain.model.LoginRequest;
 import com.personalfinancemanager.domain.entity.UserPrincipal;
 import com.personalfinancemanager.util.JwtProperties;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
 package com.personalfinancemanager.service;
 
-import com.personalfinancemanager.domain.dto.ReceiptModel;
-import com.personalfinancemanager.domain.dto.ReceiptScannedModel;
+import com.personalfinancemanager.domain.model.ReceiptModel;
+import com.personalfinancemanager.domain.model.ReceiptScannedModel;
 import com.personalfinancemanager.domain.entity.ReceiptEntity;
 import com.personalfinancemanager.domain.entity.ReceiptItemEntity;
 import com.personalfinancemanager.domain.entity.UserEntity;

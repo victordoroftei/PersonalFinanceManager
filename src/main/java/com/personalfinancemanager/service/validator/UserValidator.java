@@ -1,6 +1,6 @@
 package com.personalfinancemanager.service.validator;
 
-import com.personalfinancemanager.domain.dto.UserModel;
+import com.personalfinancemanager.domain.model.UserModel;
 import com.personalfinancemanager.exception.ValidationException;
 import org.apache.commons.lang3.StringUtils;
 

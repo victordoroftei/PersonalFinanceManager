@@ -1,4 +1,4 @@
-package com.personalfinancemanager.domain.dto;
+package com.personalfinancemanager.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.personalfinancemanager.util.DateUtil;
@@ -6,7 +6,6 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -14,11 +13,9 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class ReceiptModel {
+public class ReceiptScannedModel {
 
-    private List<String> itemNames;
-
-    private List<Double> itemPrices;
+    private String items;
 
     private Double calculatedTotal;
 
@@ -27,6 +24,8 @@ public class ReceiptModel {
     private String retailer;
 
     private String imagePath;
+
+    private String filePath;
 
     @JsonFormat(pattern = DateUtil.DATE_TIME_FORMAT)
     @DateTimeFormat(pattern = DateUtil.DATE_TIME_FORMAT)

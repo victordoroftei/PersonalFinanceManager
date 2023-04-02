@@ -1,6 +1,6 @@
 package com.personalfinancemanager.util.mapper;
 
-import com.personalfinancemanager.domain.dto.ExpenseModel;
+import com.personalfinancemanager.domain.model.ExpenseModel;
 import com.personalfinancemanager.domain.entity.ExpenseEntity;
 import com.personalfinancemanager.domain.entity.InvoiceEntity;
 import com.personalfinancemanager.domain.entity.ReceiptEntity;

@@ -33,6 +33,7 @@ public class ExpenseEntity {
     private Double price;
 
     @Column(name = "type")
+    @Enumerated(EnumType.STRING)
     private ExpenseTypeEnum type;
 
     @Column(name = "expense_date")

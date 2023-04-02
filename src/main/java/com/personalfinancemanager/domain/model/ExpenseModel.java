@@ -1,6 +1,7 @@
-package com.personalfinancemanager.domain.dto;
+package com.personalfinancemanager.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.personalfinancemanager.domain.enums.ExpenseTypeEnum;
 import com.personalfinancemanager.util.DateUtil;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,21 +14,15 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class ReceiptScannedModel {
+public class ExpenseModel {
 
-    private String items;
+    private String description;
 
-    private Double calculatedTotal;
+    private Double price;
 
-    private Double detectedTotal;
-
-    private String retailer;
-
-    private String imagePath;
-
-    private String filePath;
+    private ExpenseTypeEnum type;
 
     @JsonFormat(pattern = DateUtil.DATE_TIME_FORMAT)
     @DateTimeFormat(pattern = DateUtil.DATE_TIME_FORMAT)
-    private LocalDateTime receiptDate;
+    private LocalDateTime expenseDate;
 }
