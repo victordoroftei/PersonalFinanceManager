@@ -1,6 +1,7 @@
 package com.personalfinancemanager.controller;
 
 import com.personalfinancemanager.domain.dto.InvoiceModel;
+import com.personalfinancemanager.domain.entity.InvoiceEntity;
 import com.personalfinancemanager.security.JWTAuthorizationFilter;
 import com.personalfinancemanager.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +44,17 @@ public class InvoiceController {
     @ResponseStatus(HttpStatus.OK)
     public List<InvoiceModel> getInvoicesForMonthAndYear(@RequestParam Integer year, @RequestParam Integer month, @RequestHeader("Authorization") String token) {
         return invoiceService.getReceiptsForMonthAndYear(year, month, JWTAuthorizationFilter.getUserIdFromJwt(token));
+    }
+
+    @GetMapping("/due")
+    @ResponseStatus(HttpStatus.OK)
+    public List<InvoiceEntity> getDueInvoices(@RequestHeader("Authorization") String token) {
+        return invoiceService.getDueInvoices(JWTAuthorizationFilter.getUserIdFromJwt(token));
+    }
+
+    @PatchMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void payInvoice(@RequestBody InvoiceEntity invoice) {
+        invoiceService.payInvoice(invoice);
     }
 }

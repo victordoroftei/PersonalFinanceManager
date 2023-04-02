@@ -22,7 +22,7 @@ public class EmailService {
 
     private static final String SENDER = "recycleitapplication@gmail.com";
 
-    private final ExecutorService executorService = Executors.newFixedThreadPool(5);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     public void sendEmailAsync() {
         executorService.execute(() -> {

@@ -10,10 +10,13 @@ import com.personalfinancemanager.util.mapper.ExpenseMapper;
 import com.personalfinancemanager.util.mapper.InvoiceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -97,7 +100,8 @@ public class InvoiceService {
         return models;
     }
 
-    public void payInvoice(Integer invoiceId) {
+    public void payInvoice(InvoiceEntity invoice) {
+        Integer invoiceId = invoice.getId();
         Optional<InvoiceEntity> invoiceEntityOptional = invoiceRepository.findById(invoiceId);
 
         if (invoiceEntityOptional.isPresent()) {
@@ -110,5 +114,33 @@ public class InvoiceService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no invoice with the provided ID!");
         }
+    }
+
+    public List<InvoiceEntity> getDueInvoices(Integer userId) {
+        List<InvoiceEntity> entities = invoiceRepository.findAllByUserIdAndNotPaidOrdered(userId);
+
+        LocalDateTime now = LocalDateTime.now();
+        List<InvoiceEntity> filteredEntities = entities.stream()
+                .filter(x -> {
+                    return calculateDayDifferenceBetweenDates(x.getDueDate(), now) <= 7;
+                })
+                .collect(Collectors.toList());
+
+        for (InvoiceEntity entity : filteredEntities) {
+            entity.setUser(null);
+        }
+
+        return filteredEntities;
+    }
+
+    @Async
+    @Scheduled(fixedRate = 86400000)    // 24 hour fixed rate
+    public void sendDueInvoicesReminder() {
+        System.out.println("--------------------- DUE INVOINCES REMINDER ----------------------");
+        /// TODO: tabel cu zile si luni, sa nu trimitem de 2 ori in aceeasi zi SMS/email
+    }
+
+    private Long calculateDayDifferenceBetweenDates(LocalDateTime dueDate, LocalDateTime currentDate) {
+        return ChronoUnit.DAYS.between(currentDate, dueDate) + 1;
     }
 }

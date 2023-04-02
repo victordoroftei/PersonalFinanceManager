@@ -13,4 +13,7 @@ public interface InvoiceRepository extends JpaRepository<InvoiceEntity, Integer>
 
     @Query(value = "SELECT * FROM invoices WHERE user_id = :userId", nativeQuery = true)
     List<InvoiceEntity> findAllByUserId(Integer userId);
+
+    @Query(value = "SELECT * FROM invoices WHERE user_id = :userId AND paid = 0 ORDER BY due_date", nativeQuery = true)
+    List<InvoiceEntity> findAllByUserIdAndNotPaidOrdered(Integer userId);
 }
