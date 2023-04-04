@@ -6,6 +6,7 @@ import com.personalfinancemanager.domain.entity.UserEntity;
 import com.personalfinancemanager.repository.ExpenseRepository;
 import com.personalfinancemanager.repository.InvoiceRepository;
 import com.personalfinancemanager.repository.UserRepository;
+import com.personalfinancemanager.service.email.EmailService;
 import com.personalfinancemanager.util.mapper.ExpenseMapper;
 import com.personalfinancemanager.util.mapper.InvoiceMapper;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,8 @@ public class InvoiceService {
     private final UserRepository userRepository;
 
     private final NotificationHistoryService notificationHistoryService;
+
+    private final EmailService emailService;
 
     public void addInvoice(InvoiceModel model, Integer userId) {
         Optional<UserEntity> userOptional = userRepository.findById(userId);
@@ -137,11 +140,32 @@ public class InvoiceService {
         System.out.println("--------------------- DUE INVOICES REMINDER ----------------------");
         if (!notificationHistoryService.checkIfRecordAlreadyExists()) {
             System.out.println("--------------------- SENDING DUE INVOICES REMINDER EMAILS ----------------------");
-            // ...
+
+            Map<UserEntity, List<InvoiceEntity>> map = getDueInvoiceMailingLists();
+            for (UserEntity user : map.keySet()) {
+                emailService.sendEmailAsync(user, map.get(user));
+            }
+
             notificationHistoryService.addRecord();
         } else {
             System.out.println("--------------------- NOTIFICATION HISTORY RECORD ALREADY EXISTS ----------------------");
         }
+    }
+
+    private Map<UserEntity, List<InvoiceEntity>> getDueInvoiceMailingLists() {
+        List<UserEntity> userEntities = userRepository.findAll();
+        Map<UserEntity, List<InvoiceEntity>> mailingMap = new HashMap<>();
+
+        for (UserEntity user : userEntities) {
+            Integer id = user.getId();
+            List<InvoiceEntity> dueInvoices = getDueInvoices(id);
+
+            if (!dueInvoices.isEmpty()) {
+                mailingMap.put(user, dueInvoices);
+            }
+        }
+
+        return mailingMap;
     }
 
     private Long calculateDayDifferenceBetweenDates(LocalDateTime dueDate, LocalDateTime currentDate) {

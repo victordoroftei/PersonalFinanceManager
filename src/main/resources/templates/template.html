@@ -3,15 +3,32 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>Title</title>
+        <!--
+        <title>Due Invoices Reminder</title>
+        -->
     </head>
 
     <body>
 
-        <h1>ASYNC EMAIL TEST</h1>
+        <h2>Dear {0},</h2>
 
+        <br>
         <p>
-            This is a test
+            The Personal Finance Manager team wishes to inform you that you have {1} due invoice(s):
+        </p>
+
+        <div>
+
+            <ul>
+                {2}
+            </ul>
+
+        </div>
+
+        <br>
+        <img src="https://iili.io/HO7eVZN.png" alt="Logo" height="50px" width="50px"/>
+        <p>
+            <strong>The Personal Finance Manager Team</strong>
         </p>
 
     </body>
