@@ -77,7 +77,7 @@ public class InvoiceService {
         return possibleYears;
     }
 
-    public List<InvoiceModel> getReceiptsForMonthAndYear(Integer year, Integer month, Integer userId) {
+    public List<InvoiceEntity> getInvoicesForMonthAndYear(Integer year, Integer month, Integer userId) {
         List<InvoiceEntity> entities = invoiceRepository.findAllByUserId(userId);
 
         List<InvoiceEntity> filteredEntities = entities.stream()
@@ -94,12 +94,7 @@ public class InvoiceService {
                 })
                 .collect(Collectors.toList());
 
-        List<InvoiceModel> models = new ArrayList<>();
-        for (InvoiceEntity entity : filteredEntities) {
-            models.add(InvoiceMapper.entityToModel(entity));
-        }
-
-        return models;
+        return filteredEntities;
     }
 
     public void payInvoice(InvoiceEntity invoice) {

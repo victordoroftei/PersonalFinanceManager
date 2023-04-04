@@ -42,8 +42,8 @@ public class InvoiceController {
 
     @GetMapping("/date")
     @ResponseStatus(HttpStatus.OK)
-    public List<InvoiceModel> getInvoicesForMonthAndYear(@RequestParam Integer year, @RequestParam Integer month, @RequestHeader("Authorization") String token) {
-        return invoiceService.getReceiptsForMonthAndYear(year, month, JWTAuthorizationFilter.getUserIdFromJwt(token));
+    public List<InvoiceEntity> getInvoicesForMonthAndYear(@RequestParam Integer year, @RequestParam Integer month, @RequestHeader("Authorization") String token) {
+        return invoiceService.getInvoicesForMonthAndYear(year, month, JWTAuthorizationFilter.getUserIdFromJwt(token));
     }
 
     @GetMapping("/due")
