@@ -1,6 +1,6 @@
 package com.personalfinancemanager.service;
 
-import com.personalfinancemanager.domain.entity.ExpenseTypeSum;
+import com.personalfinancemanager.domain.enums.ExpenseTypeEnum;
 import com.personalfinancemanager.domain.model.ExpensesMonthlyStatisticsModel;
 import com.personalfinancemanager.domain.model.PercentageModel;
 import com.personalfinancemanager.domain.model.YearlyStatisticsModel;
@@ -91,9 +91,14 @@ public class StatisticsService {
         List<ExpenseEntity> filteredExpenseEntityList = expenseEntityList.stream()
                 .filter(x -> {
                     if (finalMonth != 0) {
-                        return x.getExpenseDate().getYear() == year && x.getExpenseDate().getMonthValue() == finalMonth;
+                        return  !ExpenseTypeEnum.RECEIPT.equals(x.getType())
+                                && !ExpenseTypeEnum.INVOICE.equals(x.getType())
+                                && x.getExpenseDate().getYear() == year
+                                && x.getExpenseDate().getMonthValue() == finalMonth;
                     } else {
-                        return x.getExpenseDate().getYear() == year;
+                        return  !ExpenseTypeEnum.RECEIPT.equals(x.getType())
+                                && !ExpenseTypeEnum.INVOICE.equals(x.getType())
+                                &&x.getExpenseDate().getYear() == year;
                     }
                 })
                 .collect(Collectors.toList());
@@ -138,7 +143,10 @@ public class StatisticsService {
         for (int i = 1; i <= 12; i++) {
             int finalI = i;
             double sum = expenseEntities.stream()
-                    .filter(x -> x.getExpenseDate().getYear() == year &&  x.getExpenseDate().getMonthValue() == finalI)
+                    .filter(x -> !ExpenseTypeEnum.RECEIPT.equals(x.getType())
+                            && !ExpenseTypeEnum.INVOICE.equals(x.getType())
+                            && x.getExpenseDate().getYear() == year
+                            && x.getExpenseDate().getMonthValue() == finalI)
                     .mapToDouble(ExpenseEntity::getPrice)
                     .sum();
 

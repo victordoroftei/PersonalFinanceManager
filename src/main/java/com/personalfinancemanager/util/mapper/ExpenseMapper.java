@@ -38,7 +38,7 @@ public class ExpenseMapper {
     public static ExpenseEntity invoiceEntityToExpenseEntity(InvoiceEntity entity) {
         return ExpenseEntity.builder()
                 .price(entity.getAmount())
-                .description("Invoice")
+                .description("Invoice - " + entity.getRetailer())
                 .type(ExpenseTypeEnum.INVOICE)
                 .expenseDate(entity.getPaidDate())
                 .user(entity.getUser())
