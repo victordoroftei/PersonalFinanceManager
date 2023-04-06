@@ -41,6 +41,7 @@ public class ExpenseMapper {
                 .description("Invoice")
                 .type(ExpenseTypeEnum.INVOICE)
                 .expenseDate(entity.getPaidDate())
+                .user(entity.getUser())
                 .build();
     }
 }
