@@ -29,7 +29,7 @@ public class EmailService {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
-    public void sendEmailAsync(UserEntity user, List<InvoiceEntity> invoices) {
+    public void sendEmailAsync(UserEntity user, List<InvoiceEntity> invoices, Integer notificationDays) {
         executorService.execute(() -> {
             try {
                 MimeMessage mailMessage = javaMailSender.createMimeMessage();
@@ -38,7 +38,7 @@ public class EmailService {
                 String template = loadTemplate("src/main/resources/templates/template.html");
                 String invoicesString = "";
                 for (InvoiceEntity invoice : invoices) {
-                    invoicesString += getListItemForInvoice(invoice);
+                    invoicesString += getListItemForInvoice(invoice, notificationDays);
                 }
 
                 template = template.replace("{0}", user.getFirstname());
@@ -57,7 +57,7 @@ public class EmailService {
         });
     }
 
-    private String getListItemForInvoice(InvoiceEntity invoice) {
+    private String getListItemForInvoice(InvoiceEntity invoice, Integer notificationDays) {
         String[] splitArr = invoice.getAmount().toString().split("\\.");
         String invoiceAmountString = splitArr[0] + ".";
         if (splitArr[1].length() == 0) {
@@ -69,7 +69,13 @@ public class EmailService {
             invoiceAmountString += splitArr[1].charAt(1);
         }
 
-        int dayDiff = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), invoice.getDueDate());
+        int dayDiff = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), invoice.getDueDate()) + 1;
+        if (LocalDateTime.now().getDayOfMonth() == invoice.getDueDate().getDayOfMonth()
+                && LocalDateTime.now().getMonthValue() == invoice.getDueDate().getMonthValue()
+                && LocalDateTime.now().getYear() == invoice.getDueDate().getYear()) {
+            dayDiff = 0;
+        }
+
         String listItem;
         if (dayDiff <= 0) {
             listItem = "<li style='color:red'>";
@@ -80,12 +86,18 @@ public class EmailService {
         listItem += String.format("<strong>%s</strong> - %s RON - %s - <strong>Due",
                 invoice.getRetailer(), invoiceAmountString, invoice.getType().name());
 
-        dayDiff = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), invoice.getDueDate());
+        dayDiff = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), invoice.getDueDate()) + 1;
+        if (LocalDateTime.now().getDayOfMonth() == invoice.getDueDate().getDayOfMonth()
+                && LocalDateTime.now().getMonthValue() == invoice.getDueDate().getMonthValue()
+                && LocalDateTime.now().getYear() == invoice.getDueDate().getYear()) {
+            dayDiff = 0;
+        }
+
         if (dayDiff < 0) {
             listItem += String.format(" %d days ago", (-1) * dayDiff);
-        } else if (ChronoUnit.DAYS.between(LocalDateTime.now(), invoice.getDueDate()) == 0) {
+        } else if (dayDiff == 0) {
             listItem += " today";
-        } else {
+        } else if (dayDiff <= notificationDays) {
             listItem += String.format(" in %d days", dayDiff);
         }
 

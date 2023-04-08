@@ -1,15 +1,18 @@
 package com.personalfinancemanager.service;
 
+import com.personalfinancemanager.domain.entity.UserSettingsEntity;
 import com.personalfinancemanager.domain.model.InvoiceModel;
 import com.personalfinancemanager.domain.entity.InvoiceEntity;
 import com.personalfinancemanager.domain.entity.UserEntity;
 import com.personalfinancemanager.repository.ExpenseRepository;
 import com.personalfinancemanager.repository.InvoiceRepository;
 import com.personalfinancemanager.repository.UserRepository;
+import com.personalfinancemanager.repository.UserSettingsRepository;
 import com.personalfinancemanager.service.email.EmailService;
 import com.personalfinancemanager.util.mapper.ExpenseMapper;
 import com.personalfinancemanager.util.mapper.InvoiceMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,9 +34,14 @@ public class InvoiceService {
 
     private final UserRepository userRepository;
 
+    private final UserSettingsRepository userSettingsRepository;
+
     private final NotificationHistoryService notificationHistoryService;
 
     private final EmailService emailService;
+
+    @Value("${spring.app.notification-days-default:7}")
+    private Integer defaultNotificationDays;
 
     public void addInvoice(InvoiceModel model, Integer userId) {
         Optional<UserEntity> userOptional = userRepository.findById(userId);
@@ -120,11 +128,11 @@ public class InvoiceService {
     public List<InvoiceEntity> getDueInvoices(Integer userId) {
         List<InvoiceEntity> entities = invoiceRepository.findAllByUserIdAndNotPaidOrdered(userId);
 
+        Integer notificationDays = getNotificationDaysForUserId(userId);
+
         LocalDateTime now = LocalDateTime.now();
         List<InvoiceEntity> filteredEntities = entities.stream()
-                .filter(x -> {
-                    return calculateDayDifferenceBetweenDates(x.getDueDate(), now) <= 7;
-                })
+                .filter(x -> calculateDayDifferenceBetweenDates(x.getDueDate(), now) <= notificationDays)
                 .collect(Collectors.toList());
 
         for (InvoiceEntity entity : filteredEntities) {
@@ -143,13 +151,26 @@ public class InvoiceService {
 
             Map<UserEntity, List<InvoiceEntity>> map = getDueInvoiceMailingLists();
             for (UserEntity user : map.keySet()) {
-                emailService.sendEmailAsync(user, map.get(user));
+                Integer notificationDays = getNotificationDaysForUserId(user.getId());
+                emailService.sendEmailAsync(user, map.get(user), notificationDays);
             }
 
             notificationHistoryService.addRecord();
         } else {
             System.out.println("--------------------- NOTIFICATION HISTORY RECORD ALREADY EXISTS ----------------------");
         }
+    }
+
+
+    private Integer getNotificationDaysForUserId(Integer userId) {
+        Integer notificationDays = defaultNotificationDays;
+        UserSettingsEntity userSettings = userSettingsRepository.findByUserId(userId);
+
+        if (userSettings != null) {
+            notificationDays = userSettings.getNotificationDays();
+        }
+
+        return notificationDays;
     }
 
     private Map<UserEntity, List<InvoiceEntity>> getDueInvoiceMailingLists() {
