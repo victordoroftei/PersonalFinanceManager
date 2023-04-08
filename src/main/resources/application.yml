@@ -22,3 +22,7 @@ spring:
     port: 587
     username: recycleitapplication@gmail.com
     password: aumntrenzcghinpz
+
+  app:
+    notification-days-default: 7
+    sms-days-default: 3
