@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/financemanager
-    username: admin
+    username: root
     password: admin
 
   jpa:
@@ -22,6 +22,12 @@ spring:
     port: 587
     username: recycleitapplication@gmail.com
     password: aumntrenzcghinpz
+
+  sms:
+    enabled: false
+    account-sid: ACbe082606ed3b023b0c61309292ee513f
+    auth-token: bb6fc24a5c300f28ce22d58ca68caa26
+    number: +13465177132
 
   app:
     notification-days-default: 7

@@ -9,6 +9,7 @@ import com.personalfinancemanager.repository.InvoiceRepository;
 import com.personalfinancemanager.repository.UserRepository;
 import com.personalfinancemanager.repository.UserSettingsRepository;
 import com.personalfinancemanager.service.email.EmailService;
+import com.personalfinancemanager.service.sms.SmsService;
 import com.personalfinancemanager.util.mapper.ExpenseMapper;
 import com.personalfinancemanager.util.mapper.InvoiceMapper;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +41,16 @@ public class InvoiceService {
 
     private final EmailService emailService;
 
+    private final SmsService smsService;
+
     @Value("${spring.app.notification-days-default:7}")
     private Integer defaultNotificationDays;
+
+    @Value("${spring.app.sms-days-default:3}")
+    private Integer defaultSmsDays;
+
+    @Value("${spring.sms.enabled:false}")
+    private Boolean isSmsEnabled;
 
     public void addInvoice(InvoiceModel model, Integer userId) {
         Optional<UserEntity> userOptional = userRepository.findById(userId);
@@ -142,6 +151,24 @@ public class InvoiceService {
         return filteredEntities;
     }
 
+    public List<InvoiceEntity> getDueInvoicesSms(Integer userId) {
+        List<InvoiceEntity> entities = invoiceRepository.findAllByUserIdAndNotPaidOrdered(userId);
+
+        Integer smsDays = getSmsDaysForUserId(userId);
+
+        LocalDateTime now = LocalDateTime.now();
+        List<InvoiceEntity> filteredEntities = entities.stream()
+                .filter(x -> calculateDayDifferenceBetweenDates(x.getDueDate(), now) <= smsDays
+                        && calculateDayDifferenceBetweenDates(x.getDueDate(), now) > 0)
+                .collect(Collectors.toList());
+
+        for (InvoiceEntity entity : filteredEntities) {
+            entity.setUser(null);
+        }
+
+        return filteredEntities;
+    }
+
     @Async
     @Scheduled(fixedRate = 86400000)    // 24 hour fixed rate
     public void sendDueInvoicesReminder() {
@@ -149,10 +176,22 @@ public class InvoiceService {
         if (!notificationHistoryService.checkIfRecordAlreadyExists()) {
             System.out.println("--------------------- SENDING DUE INVOICES REMINDER EMAILS ----------------------");
 
-            Map<UserEntity, List<InvoiceEntity>> map = getDueInvoiceMailingLists();
-            for (UserEntity user : map.keySet()) {
+            Map<UserEntity, List<InvoiceEntity>> mailingMap = getDueInvoiceMailingLists();
+            for (UserEntity user : mailingMap.keySet()) {
                 Integer notificationDays = getNotificationDaysForUserId(user.getId());
-                emailService.sendEmailAsync(user, map.get(user), notificationDays);
+                if (mailingMap.get(user) != null) {
+                    emailService.sendEmailAsync(user, mailingMap.get(user), notificationDays);
+                }
+            }
+
+            Map<UserEntity, List<InvoiceEntity>> smsMap = getDueInvoiceSmsLists();
+            for (UserEntity user : smsMap.keySet()) {
+                Integer smsDays = getSmsDaysForUserId(user.getId());
+                if (isSmsEnabled) {
+                    if (smsMap.get(user) != null) {
+                        smsService.sendSms(user, smsDays, smsMap.get(user));
+                    }
+                }
             }
 
             notificationHistoryService.addRecord();
@@ -173,6 +212,17 @@ public class InvoiceService {
         return notificationDays;
     }
 
+    private Integer getSmsDaysForUserId(Integer userId) {
+        Integer smsDays = defaultSmsDays;
+        UserSettingsEntity userSettings = userSettingsRepository.findByUserId(userId);
+
+        if (userSettings != null) {
+            smsDays = userSettings.getSmsDays();
+        }
+
+        return smsDays;
+    }
+
     private Map<UserEntity, List<InvoiceEntity>> getDueInvoiceMailingLists() {
         List<UserEntity> userEntities = userRepository.findAll();
         Map<UserEntity, List<InvoiceEntity>> mailingMap = new HashMap<>();
@@ -187,6 +237,22 @@ public class InvoiceService {
         }
 
         return mailingMap;
+    }
+
+    private Map<UserEntity, List<InvoiceEntity>> getDueInvoiceSmsLists() {
+        List<UserEntity> userEntities = userRepository.findAll();
+        Map<UserEntity, List<InvoiceEntity>> smsMap = new HashMap<>();
+
+        for (UserEntity user : userEntities) {
+            Integer id = user.getId();
+            List<InvoiceEntity> dueInvoices = getDueInvoicesSms(id);
+
+            if (!dueInvoices.isEmpty()) {
+                smsMap.put(user, dueInvoices);
+            }
+        }
+
+        return smsMap;
     }
 
     private Long calculateDayDifferenceBetweenDates(LocalDateTime dueDate, LocalDateTime currentDate) {
