@@ -11,6 +11,7 @@ public class UserMapper {
                 .firstname(model.getFirstname())
                 .lastname(model.getLastname())
                 .password(model.getPassword())
+                .phoneNumber(model.getPhoneNumber())
                 .build();
     }
 
@@ -19,6 +20,7 @@ public class UserMapper {
                 .emailAddress(entity.getEmailAddress())
                 .firstname(entity.getFirstname())
                 .lastname(entity.getLastname())
+                .phoneNumber(entity.getPhoneNumber())
                 .build();
     }
 }

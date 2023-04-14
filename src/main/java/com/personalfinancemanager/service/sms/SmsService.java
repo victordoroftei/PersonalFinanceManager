@@ -28,7 +28,7 @@ public class SmsService {
     public void sendSms(UserEntity user, Integer smsDays, List<InvoiceEntity> invoices) {
         Twilio.init(accountSid, authToken);
 
-        PhoneNumber toNumber = new PhoneNumber("+40760330010");
+        PhoneNumber toNumber = new PhoneNumber(user.getPhoneNumber());
         PhoneNumber fromNumber = new PhoneNumber(number);
         String body = buildSmsBody(user, smsDays, invoices);
 
