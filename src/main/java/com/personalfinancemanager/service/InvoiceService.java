@@ -158,7 +158,7 @@ public class InvoiceService {
 
         LocalDateTime now = LocalDateTime.now();
         List<InvoiceEntity> filteredEntities = entities.stream()
-                .filter(x -> calculateDayDifferenceBetweenDates(x.getDueDate(), now) <= smsDays
+                .filter(x -> calculateDayDifferenceBetweenDates(x.getDueDate(), now).equals(Long.valueOf(smsDays))
                         && calculateDayDifferenceBetweenDates(x.getDueDate(), now) > 0)
                 .collect(Collectors.toList());
 
