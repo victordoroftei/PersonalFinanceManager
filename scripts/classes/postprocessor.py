@@ -234,21 +234,21 @@ class Postprocessor:
         except ValueError:
             return False
 
-    def testFormatDate(self):
-        print(self.__formatDate("15/09/2022", "12"))
-        print(self.__formatDate("15/09/2022", "aa"))
-        print(self.__formatDate("15/09/2022", "12-00"))
-        print(self.__formatDate("15/09/2022", "12-0a0"))
-        print(self.__formatDate("15/09/2022", "a2-0a0"))
-        print(self.__formatDate("15/09/2022", "12-00-05"))
-        print(self.__formatDate("15/09/2022", "12-00-0a"))
-        print(self.__formatDate("1d/09/2022", "12-0a-0a"))
-        print(self.__formatDate("1d/09/2022", "12-0a-00"))
-        print(self.__formatDate("1d/09/2022", "1a-00-00"))
-        print(self.__formatDate("1d/09/2022", "1a-0a-00"))
-        print(self.__formatDate("1d/09/2022", "1a-0a-0a"))
-        print(self.__formatDate("1d/09/2022", "1a-00-0a"))
-        print(self.__formatDate("1d/09/2022", ""))
-        print(self.__formatDate("", "1a-00-0a"))
-        print(self.__formatDate("", ""))
+    # def testFormatDate(self):
+    #     print(self.__formatDate("15/09/2022", "12"))
+    #     print(self.__formatDate("15/09/2022", "aa"))
+    #     print(self.__formatDate("15/09/2022", "12-00"))
+    #     print(self.__formatDate("15/09/2022", "12-0a0"))
+    #     print(self.__formatDate("15/09/2022", "a2-0a0"))
+    #     print(self.__formatDate("15/09/2022", "12-00-05"))
+    #     print(self.__formatDate("15/09/2022", "12-00-0a"))
+    #     print(self.__formatDate("1d/09/2022", "12-0a-0a"))
+    #     print(self.__formatDate("1d/09/2022", "12-0a-00"))
+    #     print(self.__formatDate("1d/09/2022", "1a-00-00"))
+    #     print(self.__formatDate("1d/09/2022", "1a-0a-00"))
+    #     print(self.__formatDate("1d/09/2022", "1a-0a-0a"))
+    #     print(self.__formatDate("1d/09/2022", "1a-00-0a"))
+    #     print(self.__formatDate("1d/09/2022", ""))
+    #     print(self.__formatDate("", "1a-00-0a"))
+    #     print(self.__formatDate("", ""))
 
