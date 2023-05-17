@@ -16,7 +16,6 @@ public class SmsHistoryService {
 
     public void addSmsHistoryRecord(UserEntity user, String body) {
         SmsHistoryEntity entity = SmsHistoryEntity.builder()
-                .id(user.getId())
                 .user(user)
                 .phoneNumber(user.getPhoneNumber())
                 .body(body)
