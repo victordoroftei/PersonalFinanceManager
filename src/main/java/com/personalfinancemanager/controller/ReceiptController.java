@@ -1,19 +1,13 @@
 package com.personalfinancemanager.controller;
 
 import com.personalfinancemanager.domain.model.ReceiptModel;
-import com.personalfinancemanager.domain.entity.ReceiptEntity;
 import com.personalfinancemanager.security.JWTAuthorizationFilter;
 import com.personalfinancemanager.service.ReceiptService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -48,6 +42,7 @@ public class ReceiptController {
         return receiptService.getPossibleReceiptYears(JWTAuthorizationFilter.getUserIdFromJwt(token));
     }
 
+    /*
     @GetMapping(value = "/image/{imagePath}", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getImageWithMediaType(@PathVariable String imagePath) throws IOException {
         FileInputStream in = new FileInputStream("E:\\__Teme\\_Licenta\\PersonalFinanceManager\\uploads\\" + imagePath);
@@ -73,6 +68,7 @@ public class ReceiptController {
     public ReceiptEntity getReceiptEntity() {
         return receiptService.getOne();
     }
+     */
 
     /*
 
