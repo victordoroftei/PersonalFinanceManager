@@ -5,6 +5,7 @@ import com.personalfinancemanager.domain.model.ReceiptScannedModel;
 import com.personalfinancemanager.domain.entity.ReceiptEntity;
 import com.personalfinancemanager.domain.entity.ReceiptItemEntity;
 import com.personalfinancemanager.domain.entity.UserEntity;
+import com.personalfinancemanager.repository.ExpenseRepository;
 import com.personalfinancemanager.repository.ReceiptItemRepository;
 import com.personalfinancemanager.repository.ReceiptRepository;
 import com.personalfinancemanager.exception.FileProcessException;
@@ -12,6 +13,7 @@ import com.personalfinancemanager.exception.FileSaveException;
 import com.personalfinancemanager.exception.ScriptException;
 import com.personalfinancemanager.repository.UserRepository;
 import com.personalfinancemanager.util.JsonUtil;
+import com.personalfinancemanager.util.mapper.ExpenseMapper;
 import com.personalfinancemanager.util.mapper.ReceiptMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -37,6 +39,8 @@ public class ReceiptService {
     private final ReceiptItemRepository receiptItemRepository;
 
     private final UserRepository userRepository;
+
+    private final ExpenseRepository expenseRepository;
 
     public List<ReceiptModel> getReceiptsForMonthAndYear(Integer year, Integer month, Integer userId) {
         List<ReceiptEntity> entities = receiptRepository.findAllByUserId(userId);
@@ -103,6 +107,7 @@ public class ReceiptService {
             receiptEntity.setInsertedDate(LocalDateTime.now());
             receiptEntity.setImagePath(getImagePathFromFullPath(receiptEntity.getImagePath()));
 
+            expenseRepository.save(ExpenseMapper.receiptEntityToExpenseEntity(receiptEntity));
             receiptRepository.save(receiptEntity);
             saveReceiptItems(model, receiptEntity);
         } else {

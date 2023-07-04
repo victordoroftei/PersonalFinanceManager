@@ -28,7 +28,7 @@ spring:
     password: hzogofazrtioykzt
 
   sms:
-    enabled: false
+    enabled: true
     account-sid: ACbe082606ed3b023b0c61309292ee513f
     auth-token: bb6fc24a5c300f28ce22d58ca68caa26
     number: +13465177132

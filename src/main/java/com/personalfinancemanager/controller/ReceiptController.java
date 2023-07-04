@@ -41,42 +41,4 @@ public class ReceiptController {
     public Set<Integer> getPossibleReceiptYears(@RequestHeader("Authorization") String token) {
         return receiptService.getPossibleReceiptYears(JWTAuthorizationFilter.getUserIdFromJwt(token));
     }
-
-    /*
-    @GetMapping(value = "/image/{imagePath}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] getImageWithMediaType(@PathVariable String imagePath) throws IOException {
-        FileInputStream in = new FileInputStream("E:\\__Teme\\_Licenta\\PersonalFinanceManager\\uploads\\" + imagePath);
-        return IOUtils.toByteArray(in);
-    }
-
-    @GetMapping("/all")
-    @ResponseStatus(HttpStatus.OK)
-    public ReceiptModel getExtractedDataTest() {
-        return ReceiptModel.builder()
-                .calculatedTotal(55.16)
-                .detectedTotal(55.26)
-                .receiptDate(LocalDateTime.parse("2022-12-02T10:53:24"))
-                .imagePath("E:\\__Teme\\_Licenta\\PersonalFinanceManager\\uploads\\7c1f88d1-f952-4b84-8ab9-aed56c138cb7.jpg")
-                .itemNames(List.of("STRUGURI. ROZ", "MARLBORO RED KS"))
-                .itemPrices(List.of(8.16, 47.0))
-                .retailer("PROFI")
-                .build();
-    }
-
-    @GetMapping("/one-entity")
-    @ResponseStatus(HttpStatus.OK)
-    public ReceiptEntity getReceiptEntity() {
-        return receiptService.getOne();
-    }
-     */
-
-    /*
-
-    @PostMapping("/sendEmail")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void sendEmail() {
-        emailService.sendEmailAsync();
-    }
-
-     */
 }
