@@ -74,19 +74,6 @@ class Postprocessor:
         detectedTotal = 0.0
         chosenDetectedTotal = False
 
-        '''
-        for line in self.__lines:
-            result = re.search(r"(TOTAL\.?\s*)([0-9]+[\.,][0-9]{2})", line)
-            if result is not None and result.groups() is not None:
-                detectedTotalAttempt = result.group(2).strip().replace(",", ".")
-                print(detectedTotalAttempt, "******")
-                try:
-                    detectedTotal = float(detectedTotalAttempt)
-                    detectedTotals.append(detectedTotal)
-                except Exception:
-                    detectedTotal = None
-        '''
-
         for line in self.__lines:
             if "TOTAL" in line.upper() and "TVA" not in line.upper():
                 result = re.search(r"[0-9]+[\.,][0-9]{2}", line)
@@ -222,7 +209,7 @@ class Postprocessor:
             except Exception:
                 return oldFormattedString
 
-        if oldFormattedString == formattedString:   # wasn't able to detect any time, so it has to be added manually
+        if oldFormattedString == formattedString:   # if wasn't able to detect any time, it has to be added manually
             formattedString += f"T00:00:00"
 
         return formattedString
@@ -233,22 +220,3 @@ class Postprocessor:
             return True
         except ValueError:
             return False
-
-    # def testFormatDate(self):
-    #     print(self.__formatDate("15/09/2022", "12"))
-    #     print(self.__formatDate("15/09/2022", "aa"))
-    #     print(self.__formatDate("15/09/2022", "12-00"))
-    #     print(self.__formatDate("15/09/2022", "12-0a0"))
-    #     print(self.__formatDate("15/09/2022", "a2-0a0"))
-    #     print(self.__formatDate("15/09/2022", "12-00-05"))
-    #     print(self.__formatDate("15/09/2022", "12-00-0a"))
-    #     print(self.__formatDate("1d/09/2022", "12-0a-0a"))
-    #     print(self.__formatDate("1d/09/2022", "12-0a-00"))
-    #     print(self.__formatDate("1d/09/2022", "1a-00-00"))
-    #     print(self.__formatDate("1d/09/2022", "1a-0a-00"))
-    #     print(self.__formatDate("1d/09/2022", "1a-0a-0a"))
-    #     print(self.__formatDate("1d/09/2022", "1a-00-0a"))
-    #     print(self.__formatDate("1d/09/2022", ""))
-    #     print(self.__formatDate("", "1a-00-0a"))
-    #     print(self.__formatDate("", ""))
-
