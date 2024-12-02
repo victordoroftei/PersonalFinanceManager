@@ -1,7 +1,7 @@
 DELETE FROM expenses;
 DELETE FROM receipt_items;
 DELETE FROM receipts;
-DELETE FROM invoices
+DELETE FROM invoices;
 DELETE FROM notification_history;
 
 SET @uid = (SELECT u.id FROM users u WHERE u.email = 'victordoro78@gmail.com' LIMIT 1);

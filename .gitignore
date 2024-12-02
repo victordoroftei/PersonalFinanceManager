@@ -34,3 +34,6 @@ build/
 
 out/
 .mvn/
+
+app.key
+app.pub
