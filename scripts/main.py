@@ -24,8 +24,6 @@ class Preprocessor:
         blur = cv2.GaussianBlur(gray, (3, 3), 0)
         thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-        opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=1)
         invert = 255 - thresh
 
         self.__img = invert
@@ -78,7 +76,6 @@ if noArgs == 1:
     cv2.imwrite('box.jpg', preprocessor.getImage())
 
     print()
-    # postprocessor.testFormatDate()
 
     endTime = timer() - startTime
     print(f"\n{endTime}s")
