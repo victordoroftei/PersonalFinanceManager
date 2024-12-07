@@ -1,7 +1,7 @@
 
 # Personal Finance Manager 💰- Backend
 
-The **Java 17/Spring Boot 3.x** backend of Personal Finance Manager, an application designed to assist individuals affected by economic fluctuations or those looking to track and analyze their personal spending over a specific timeframe. This backend service integrates with **Python-implemented Optical Character Recognition (OCR)** technology for document processing and supports an [**Angular** frontend](https://github.com/victordoroftei/FE-personal-finance-manager) for a seamless user experience.
+The **Java 17/Spring Boot 3.x** backend of Personal Finance Manager, an application designed to assist individuals affected by economic fluctuations or those looking to track and analyze their personal spending over a specific timeframe. This backend service integrates with **Python-implemented Optical Character Recognition (OCR)** technology for document processing and supports an [**Angular** frontend](https://github.com/victordoroftei/personal-finance-manager) for a seamless user experience.
 
 ---
 
@@ -25,7 +25,9 @@ The **Java 17/Spring Boot 3.x** backend of Personal Finance Manager, an applicat
 - **Language**: Python
 - **Library**: PyTesseract (for **OCR**)
 
-### **Frontend**
-- **Framework**: Angular (developed in a [separate repository](https://github.com/victordoroftei/FE-personal-finance-manager))
+### **Frontend (developed in a [separate repository](https://github.com/victordoroftei/personal-finance-manager))**
+- **Framework**: Angular
+- **Languages**: HTML, CSS, TypeScript
+- **Design**: Bootstrap, Angular Material
 
 ---
